@@ -2,11 +2,13 @@ DEFINES += QTCREATORNOTIFY_LIBRARY
 
 # QtCreatorNotify files
 
-SOURCES += qtcreatornotifyplugin.cc
+SOURCES += qtcreatornotifyplugin.cc \
+    notifyoptionpage.cc
 
 HEADERS += qtcreatornotifyplugin.hh \
         qtcreatornotify_global.hh \
-        qtcreatornotifyconstants.hh
+        qtcreatornotifyconstants.hh \
+    notifyoptionpage.hh
 
 # Qt Creator linking
 
@@ -35,7 +37,7 @@ QTC_LIB_DEPENDS += \
     # nothing here at this time
 
 QTC_PLUGIN_DEPENDS += \
-    coreplugin
+    coreplugin projectexplorer
 
 QTC_PLUGIN_RECOMMENDS += \
     # optional plugin dependencies. nothing here at this time
@@ -43,4 +45,7 @@ QTC_PLUGIN_RECOMMENDS += \
 ###### End _dependencies.pri contents ######
 
 include($$QTCREATOR_SOURCES/src/qtcreatorplugin.pri)
+
+FORMS += \
+    optionsform.ui
 
