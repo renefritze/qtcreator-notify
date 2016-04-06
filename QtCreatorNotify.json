@@ -1,0 +1,15 @@
+{
+    "Name" : "QtCreatorNotify",
+    "Version" : "0.0.1",
+    "CompatVersion" : "0.0.1",
+    "Vendor" : "RM",
+    "Copyright" : "",
+    "License" : "WTFPL-v2",
+    "Description" : "",
+    "Url" : "",
+    "Dependencies" : [
+{ "Name" : "Core", "Version" : "3.5.0" },
+ { "Name" : "ProjectExplorer", "Version" : "3.5.0" }
+ ]
+}
+
