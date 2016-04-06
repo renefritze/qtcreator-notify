@@ -1,5 +1,6 @@
 #include "qtcreatornotifyplugin.hh"
 #include "qtcreatornotifyconstants.hh"
+#include "notifyoptionpage.hh"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/icontext.h>
@@ -7,6 +8,7 @@
 #include <coreplugin/actionmanager/command.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/coreconstants.h>
+#include <projectexplorer/buildmanager.h>
 
 #include <QAction>
 #include <QMessageBox>
@@ -14,6 +16,7 @@
 #include <QMenu>
 
 #include <QtPlugin>
+#include <QProcess>
 
 using namespace QtCreatorNotify::Internal;
 
@@ -40,17 +43,10 @@ bool QtCreatorNotifyPlugin::initialize(const QStringList &arguments, QString *er
   Q_UNUSED(arguments)
   Q_UNUSED(errorString)
 
-  QAction *action = new QAction(tr("QtCreatorNotify action"), this);
-  Core::Command *cmd = Core::ActionManager::registerAction(action, Constants::ACTION_ID,
-                                                           Core::Context(Core::Constants::C_GLOBAL));
-  cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+Alt+Meta+A")));
-  connect(action, SIGNAL(triggered()), this, SLOT(triggerAction()));
+  connect(ProjectExplorer::BuildManager::instance(), SIGNAL(buildQueueFinished(bool)),
+          this, SLOT(triggerAction(bool)));
 
-  Core::ActionContainer *menu = Core::ActionManager::createMenu(Constants::MENU_ID);
-  menu->menu()->setTitle(tr("QtCreatorNotify"));
-  menu->addAction(cmd);
-  Core::ActionManager::actionContainer(Core::Constants::M_TOOLS)->addMenu(menu);
-
+  addAutoReleasedObject(new NotifyOptionPage);
   return true;
 }
 
@@ -69,10 +65,15 @@ ExtensionSystem::IPlugin::ShutdownFlag QtCreatorNotifyPlugin::aboutToShutdown()
   return SynchronousShutdown;
 }
 
-void QtCreatorNotifyPlugin::triggerAction()
+void QtCreatorNotifyPlugin::triggerAction(bool success)
 {
-  QMessageBox::information(Core::ICore::mainWindow(),
-                           tr("Action triggered"),
-                           tr("This is an action from QtCreatorNotify."));
+  std::string cmd("notify-send -u ");
+  if(success)
+    cmd += "normal ";
+  else
+    cmd += "critical ";
+  cmd += "COMPILE";
+
+  QProcess::execute( QString::fromStdString(cmd));
 }
 
