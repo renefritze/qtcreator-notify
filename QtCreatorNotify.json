@@ -8,8 +8,8 @@
     "Description" : "",
     "Url" : "",
     "Dependencies" : [
-{ "Name" : "Core", "Version" : "3.5.0" },
- { "Name" : "ProjectExplorer", "Version" : "3.5.0" }
- ]
+        { "Name" : "Core", "Version" : "4.1.0" },
+        { "Name" : "ProjectExplorer", "Version" : "4.1.0" }
+    ]
 }
 
